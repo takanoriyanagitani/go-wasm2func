@@ -17,6 +17,7 @@ fmts() {
 		-type f \
 		-name '*.sh' |
 		xargs \
+			-r \
 			shfmt --write
 }
 
