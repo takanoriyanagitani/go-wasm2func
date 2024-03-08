@@ -1,0 +1,1 @@
+../../../simple/mul/vuln.sh
