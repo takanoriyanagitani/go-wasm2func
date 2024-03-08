@@ -127,15 +127,15 @@ var mulFn MulFn = must(wf2.FromCompiled(
 ))
 
 func main() {
-	var c float32 = must(mulFn.mul32f(
-		42.0,
-		0.25,
-	))
-	fmt.Printf("answer: %v\n", c)
-
 	defer func() {
 		mustNil(mdl.Close(context.Background()))
 		mustNil(compiled.Close(context.Background()))
 		mustNil(wtime.Close())
 	}()
+
+	var c float32 = must(mulFn.mul32f(
+		42.0,
+		0.25,
+	))
+	fmt.Printf("answer: %v\n", c)
 }
