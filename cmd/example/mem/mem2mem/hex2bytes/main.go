@@ -92,9 +92,9 @@ type ConvFn struct {
 	inputPtr  func() (int32, error)
 	outputPtr func() (int32, error)
 
-	emsgPtr func() (int32, error)
-	emsgSize func() (int32, error)
-    errorMessageSize func()(int32, error)
+	emsgPtr          func() (int32, error)
+	emsgSize         func() (int32, error)
+	errorMessageSize func() (int32, error)
 
 	hex2bytes func() (int32, error)
 }
@@ -174,27 +174,32 @@ func main() {
 		mustNil(wtime.Close())
 	}()
 
-    _, _ = mem.Grow(1)
+	_, _ = mem.Grow(1)
 
-	var icap int32 = must(convFn.inputResize(32))
+	var icap int32 = must(convFn.inputResize(4))
 	fmt.Printf("input cap: %v\n", icap)
-	var ocap int32 = must(convFn.outputResize(16))
+	var ocap int32 = must(convFn.outputResize(2))
 	fmt.Printf("output cap: %v\n", ocap)
 
 	var iptr int32 = must(convFn.inputPtr())
 	fmt.Printf("input ptr: %v\n", iptr)
 	fmt.Printf("mem sz: %v\n", mem.Size())
 
-    mustNil(rwm.Write(
-        uint32(iptr),
-        []byte("cafef00ddeadbeafface864299792458"),
-    ))
+	mustNil(rwm.Write(
+		uint32(iptr),
+		[]byte{
+			0x33,
+			0x37,
+			0x37,
+			0x36,
+		},
+	))
 
-    var eptr int32 = must(convFn.emsgPtr())
+	var eptr int32 = must(convFn.emsgPtr())
 	fmt.Printf("emsg ptr: %v\n", eptr)
-    var esz int32 = must(convFn.emsgSize())
+	var esz int32 = must(convFn.emsgSize())
 	fmt.Printf("emsg size: %v\n", esz)
-    var errorMessageSize int32 = must(convFn.errorMessageSize())
+	var errorMessageSize int32 = must(convFn.errorMessageSize())
 	fmt.Printf("err msg size: %v\n", errorMessageSize)
 
 	var hsz int32 = must(convFn.hex2bytes())
