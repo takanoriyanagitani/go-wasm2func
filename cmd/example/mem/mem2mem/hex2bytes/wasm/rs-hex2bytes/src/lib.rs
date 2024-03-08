@@ -4,9 +4,9 @@ static INPUT: RwLock<Option<Vec<u8>>> = RwLock::new(None);
 static OUTPUT: RwLock<Option<Vec<u8>>> = RwLock::new(None);
 
 static EMSG: RwLock<[u8; 256]> = RwLock::new([0; 256]);
-static EMSG_SZ: RwLock<u8> = RwLock::new(42);
+static EMSG_SZ: RwLock<u8> = RwLock::new(0);
 
-static mut EMSG_SIZE: u8 = 127;
+static mut EMSG_SIZE: u8 = 0;
 
 fn emsg(msg: &str) -> Result<usize, &'static str> {
     let mb: &[u8] = msg.as_bytes();
@@ -144,7 +144,7 @@ pub extern "C" fn input_ptr() -> *const u8 {
 
 fn hex2v(h: &[u8], out: &mut Vec<u8>) -> Result<i32, &'static str> {
     out.clear();
-    let mut chunks = h.chunks(2);
+    let mut chunks = h.chunks_exact(2);
     chunks.try_fold(0, |state, next| {
         let s: &str = std::str::from_utf8(next).map_err(|_| "invalid str")?;
         let u: u8 = u8::from_str_radix(s, 16).map_err(|_| "invalid u8")?;
