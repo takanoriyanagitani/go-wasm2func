@@ -27,10 +27,12 @@ fn hex2bytes(h: &[u8], b: &mut [u8]) -> Result<usize, &'static str>{
 
 #[allow(unsafe_code)]
 #[no_mangle]
-pub extern "C" fn hex_string2bytes() -> i32 {
+pub extern "C" fn hex_string2bytes(length: i32) -> i32 {
 	let i: &[u8] = unsafe { &I_BUF };
+	let min: usize = (length as usize).min(i.len());
+	let limited: &[u8] = &i[..min];
 	let o: &mut [u8] = unsafe { &mut O_BUF };
-	hex2bytes(i, o)
+	hex2bytes(limited, o)
 	.ok()
 	.and_then(|u| u.try_into().ok())
 	.unwrap_or(-1)

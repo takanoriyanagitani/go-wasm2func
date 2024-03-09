@@ -26,7 +26,7 @@ import { readFile } from "node:fs/promises";
 		iview[2] = 0x33
 		iview[3] = 0x32
 
-		hex_string2bytes()
+		hex_string2bytes(4)
 
 		const optr = o_ptr()
 		const oview = new Uint8Array(memory?.buffer, optr, 2)

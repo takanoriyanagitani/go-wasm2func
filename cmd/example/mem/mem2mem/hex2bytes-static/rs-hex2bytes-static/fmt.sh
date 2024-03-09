@@ -13,10 +13,10 @@ fmtg() {
 
 fmts() {
 	which shfmt &&
-	find \
-		. \
-		-type f \
-		-name '*.sh' |
+		find \
+			. \
+			-type f \
+			-name '*.sh' |
 		xargs \
 			-r \
 			shfmt --write
